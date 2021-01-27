@@ -43,6 +43,7 @@ call plug#begin(get(g:, 'bundle_home', '~/.vim/bundles'))
 
 " 全文快速移动，<leader><leader>f{char} 即可触发
 Plug 'easymotion/vim-easymotion'
+nmap ss <Plug>(easymotion-s2)
 
 " 文件浏览器，代替 netrw
 Plug 'justinmk/vim-dirvish'
@@ -123,8 +124,8 @@ if index(g:bundle_group, 'basic') >= 0
 	nmap <m-e> <Plug>(choosewin)
 
 	" 默认不显示 startify
-	let g:startify_disable_at_vimenter = 1
-	let g:startify_session_dir = '~/.vim/session'
+	"let g:startify_disable_at_vimenter = 1
+	"let g:startify_session_dir = '~/.vim/session'
 
 	" 使用 <space>ha 清除 errormarker 标注的错误
 	noremap <silent><space>ha :RemoveErrorMarkers<cr>
@@ -173,54 +174,6 @@ if index(g:bundle_group, 'enhanced') >= 0
 	" ALT_+/- 用于按分隔符扩大缩小 v 选区
 	map <m-=> <Plug>(expand_region_expand)
 	map <m--> <Plug>(expand_region_shrink)
-endif
-
-
-"----------------------------------------------------------------------
-" 自动生成 ctags/gtags，并提供自动索引功能
-" 不在 git/svn 内的项目，需要在项目根目录 touch 一个空的 .root 文件
-" 详细用法见：https://zhuanlan.zhihu.com/p/36279445
-"----------------------------------------------------------------------
-if index(g:bundle_group, 'tags') >= 0
-
-	" 提供 ctags/gtags 后台数据库自动更新功能
-	Plug 'ludovicchabant/vim-gutentags'
-
-	" 提供 GscopeFind 命令并自动处理好 gtags 数据库切换
-	" 支持光标移动到符号名上：<leader>cg 查看定义，<leader>cs 查看引用
-	Plug 'skywind3000/gutentags_plus'
-
-	" 设定项目目录标志：除了 .git/.svn 外，还有 .root 文件
-	let g:gutentags_project_root = ['.root']
-	let g:gutentags_ctags_tagfile = '.tags'
-
-	" 默认生成的数据文件集中到 ~/.cache/tags 避免污染项目目录，好清理
-	let g:gutentags_cache_dir = expand('~/.cache/tags')
-
-	" 默认禁用自动生成
-	let g:gutentags_modules = [] 
-
-	" 如果有 ctags 可执行就允许动态生成 ctags 文件
-	if executable('ctags')
-		let g:gutentags_modules += ['ctags']
-	endif
-
-	" 如果有 gtags 可执行就允许动态生成 gtags 数据库
-	if executable('gtags') && executable('gtags-cscope')
-		let g:gutentags_modules += ['gtags_cscope']
-	endif
-
-	" 设置 ctags 的参数
-	let g:gutentags_ctags_extra_args = []
-	let g:gutentags_ctags_extra_args = ['--fields=+niazS', '--extra=+q']
-	let g:gutentags_ctags_extra_args += ['--c++-kinds=+px']
-	let g:gutentags_ctags_extra_args += ['--c-kinds=+px']
-
-	" 使用 universal-ctags 的话需要下面这行，请反注释
-	" let g:gutentags_ctags_extra_args += ['--output-format=e-ctags']
-
-	" 禁止 gutentags 自动链接 gtags 数据库
-	let g:gutentags_auto_add_gtags_cscope = 0
 endif
 
 
@@ -314,6 +267,7 @@ if index(g:bundle_group, 'nerdtree') >= 0
 	noremap <space>nn :NERDTree<cr>
 	noremap <space>no :NERDTreeFocus<cr>
 	noremap <space>nm :NERDTreeMirror<cr>
+	"NERDTreeToggle切换nerdtree开关状态，关闭时打开，打开时关闭
 	noremap <space>nt :NERDTreeToggle<cr>
 endif
 
@@ -364,7 +318,7 @@ if index(g:bundle_group, 'ale') >= 0
 	let g:ale_linters = {
 				\ 'c': ['gcc', 'cppcheck'], 
 				\ 'cpp': ['gcc', 'cppcheck'], 
-				\ 'python': ['flake8', 'pylint'], 
+				\ 'python': ['flake8'], 
 				\ 'lua': ['luac'], 
 				\ 'go': ['go build', 'gofmt'],
 				\ 'java': ['javac'],
